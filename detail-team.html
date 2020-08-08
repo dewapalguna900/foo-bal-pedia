@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Foo-Bal-Pedia" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foo-Bal-Pedia</title>
+    <meta name="description" content="Foot-Ball-Pedia" />
+    <link rel="stylesheet" href="src/css/font-awesome/all.css">
+    <link rel="stylesheet" href="src/css/materialize.min.css">
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#3949ab" />
+</head>
+
+<body class="grey lighten-4">
+    <nav>
+        <div class="nav-wrapper indigo darken-1">
+            <img src="/assets/img/nav_icon.svg" alt="Logo Foot-Ball-Pedia" class="brand-logo" width="50px"
+                style="margin: 5px 0 0 20px;">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">☰</i></a>
+            <ul class="topnav right hide-on-med-and-down">
+                <li><a href="./index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="./index.html">Home</a></li>
+    </ul>
+
+    <h4 class="center-align">Informasi Team Detail</h4>
+
+    <div class="container" id="body-content"></div>
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red" id="save-team">
+            <i class="far fa-fw fa-save"></i>
+        </a>
+    </div>
+
+    <script src="/src/js/register_sw.js"></script>
+    <script src="src/js/materialize.min.js"></script>
+    <script src="src/js/detail_team.js" type="module"></script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{
+    "name": "Foo-Bal-Pedia",
+    "short_name": "Football Pedia",
+    "theme_color": "#3949ab",
+    "background_color": "#3949ab",
+    "display": "standalone",
+    "orientation": "portrait",
+    "start_url": "/index.html",
+    "icons": [
+        {
+            "src": "icon_512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icon_192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "gcm_sender_id": "67031578492"
+}
