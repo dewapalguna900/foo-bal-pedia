@@ -1,8 +1,8 @@
 import dbObjects from "./db.js";
 
 const apiObjects = {
-    loadCompetitions: function (id_competition = 2000) {
-        const url = `https://api.football-data.org/v2/competitions/${id_competition}/teams`;
+    loadCompetitions: function (id_competition = "2000") {
+        const url = `https://api.football-data.org/v4/competitions/${id_competition}/teams`;
 
         if ("caches" in window) {
             caches.match(url)
@@ -91,7 +91,7 @@ const apiObjects = {
             const UrlParams = new URLSearchParams(window.location.search);
             const id_team = UrlParams.get('id');
 
-            const url = `https://api.football-data.org/v2/teams/${id_team}`;
+            const url = `https://api.football-data.org/v4/teams/${id_team}`;
 
             if ("caches" in window) {
                 caches.match(url)
