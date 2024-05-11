@@ -86,7 +86,8 @@ const apiObjects = {
             const UrlParams = new URLSearchParams(window.location.search);
             const id_team = UrlParams.get('id');
 
-            const url = `https://api.football-data.org/v4/teams/${id_team}`;
+            // const url = `https://api.football-data.org/v4/teams/${id_team}`;
+            const url = `https://v3.football.api-sports.io/teams?id=${id_team}`;
 
             if ("caches" in window) {
                 caches.match(url)
@@ -103,7 +104,7 @@ const apiObjects = {
 
             fetch(url, {
                 headers: {
-                    'X-Auth-Token': '35794953e6804ca6ac42557550827322'
+                    'x-apisports-key': 'cdcb1506eae903d882be3c4bd56c0b0f'
                 }
             }).then(response => {
                 if (response.status !== 200) {
@@ -112,8 +113,8 @@ const apiObjects = {
                 return response.json();
             })
                 .then(responseJson => {
-                    apiObjects.setDetailTeamView(responseJson);
-                    resolve(responseJson);
+                    apiObjects.setDetailTeamView(responseJson.response[0]);
+                    resolve(responseJson.response[0]);
                 })
         });
     },
@@ -122,13 +123,13 @@ const apiObjects = {
         const detailTeamView = document.createElement('div');
         detailTeamView.className = 'row';
 
-        let teamLogo = '../../assets/img/default_team_logo.png';
-        if (data.crestUrl !== null && data.crestUrl !== "") {
-            teamLogo = data.crestUrl.replace(/^http:\/\//i, 'https://');
-        }
+        // let teamLogo = '../../assets/img/default_team_logo.png';
+        // if (data.crestUrl !== null && data.crestUrl !== "") {
+        //     teamLogo = data.crestUrl.replace(/^http:\/\//i, 'https://');
+        // }
 
-        let strDetailTeam = `<h4 class="col s12 m12 l12 center-align">-= ${data.name} =-</h4>
-        <img src="${teamLogo}" alt="Bendera Team ${data.name}" id="img-team" 
+        let strDetailTeam = `<h4 class="col s12 m12 l12 center-align">-= ${data.team.name} =-</h4>
+        <img src="${data.team.logo}" alt="Bendera Team ${data.team.name}" id="img-team" 
             class="responsive-img" width="60%" style="display:block;margin:0 auto;">
         <hr>
         <table class="striped">
@@ -139,76 +140,34 @@ const apiObjects = {
             </thead>
             <tr>
                 <td>Nama Tim</td>
-                <td>: ${data.name}</td>
-            </tr>
-            <tr>
-                <td>Warna Jersey</td>
-                <td>: ${data.clubColors}</td>
+                <td>: ${data.team.name}</td>
             </tr>
             <tr>
                 <td>Berdiri</td>
-                <td>: Tahun ${data.founded}</td>
+                <td>: Tahun ${data.team.founded}</td>
             </tr>
             <tr>
-                <td>Kode FIFA</td>
-                <td>: ${data.tla}</td>
+                <td>Venue</td>
+                <td>: ${data.venue.name}</td>
             </tr>
             <tr>
-                <td>Email</td>
-                <td>: ${data.email}</td>
+                <td>Venue address</td>
+                <td>: ${data.venue.address + ', ' + data.venue.city}</td>
             </tr>
             <tr>
-                <td>No. Telp</td>
-                <td>: ${data.phone}</td>
-            </tr>
-            <tr>
-                <td>Official Website</td>
-                <td>: <a href="${data.website}" target="_blank">${data.website}</a></td>
+                <td>Venue capacity</td>
+                <td>: ${Number(data.venue.capacity).toLocaleString()}</td>
             </tr>
         </table>
         <hr>
         <h6 class="center-align light-blue lighten-2" style="padding: 20px 0;"><strong>Personil Tim</strong></h6>`;
 
-        if (data.squad.length !== 0) {
-            strDetailTeam += '<ol class="collapsible">';
-            data.squad.forEach(personil => {
-                strDetailTeam += `<li>
-                <div class="collapsible-header">${personil.name} (${personil.role})</div>
-                <div class="collapsible-body">
-                    <table>
-                        <tr>
-                            <td>Nama</td>
-                            <td>: ${personil.name}</td>
-                        </tr>
-                        <tr>
-                            <td>TTL</td>
-                            <td>: ${personil.countryOfBirth}, ${personil.dateOfBirth.substr(0, 10)}</td>
-                        </tr>
-                        <tr>
-                            <td>Nationality</td>
-                            <td>: ${personil.nationality}</td>
-                        </tr>
-                        <tr>
-                            <td>Role</td>
-                            <td>: ${personil.role}</td>
-                        </tr>
-                        <tr>
-                            <td>Posisi</td>
-                            <td>: ${personil.position}</td>
-                        </tr>
-                    </table>
-                </div>
-            </li>`;
-            });
-            strDetailTeam += '</ol>';
-        } else {
-            strDetailTeam += `<ol class="collapsible">
-                <li>
-                <div class="collapsible-header">Squad Information not available.</div>
-                <div class="collapsible-body">Squad Information not available.</div>
-                </li>
-            </ol>`;
-        }
+        strDetailTeam += `<ol class="collapsible">
+            <li>
+            <div class="collapsible-header">Squad Information not available.</div>
+            <div class="collapsible-body">Squad Information not available.</div>
+            </li>
+        </ol>`;
 
         detailTeamView.innerHTML = strDetailTeam;
         contentContainer.innerHTML = " ";
