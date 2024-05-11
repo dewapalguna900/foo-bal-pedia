@@ -123,13 +123,23 @@ const apiObjects = {
         const detailTeamView = document.createElement('div');
         detailTeamView.className = 'row';
 
+        let teamDetail = {
+            'id': data.team.id,
+            'name': data.team.name,
+            'founded': data.team.founded,
+            'logo': data.team.logo,
+            'venue': data.venue.name,
+            'venue_address': data.venue.address + ', ' + team.venue.city,
+            'venue_capacity': data.venue.capacity
+        };
+
         // let teamLogo = '../../assets/img/default_team_logo.png';
         // if (data.crestUrl !== null && data.crestUrl !== "") {
         //     teamLogo = data.crestUrl.replace(/^http:\/\//i, 'https://');
         // }
 
-        let strDetailTeam = `<h4 class="col s12 m12 l12 center-align">-= ${data.team.name} =-</h4>
-        <img src="${data.team.logo}" alt="Bendera Team ${data.team.name}" id="img-team" 
+        let strDetailTeam = `<h4 class="col s12 m12 l12 center-align">-= ${teamDetail.name} =-</h4>
+        <img src="${teamDetail.logo}" alt="Bendera Team ${teamDetail.name}" id="img-team" 
             class="responsive-img" width="60%" style="display:block;margin:0 auto;">
         <hr>
         <table class="striped">
@@ -140,23 +150,23 @@ const apiObjects = {
             </thead>
             <tr>
                 <td>Nama Tim</td>
-                <td>: ${data.team.name}</td>
+                <td>: ${teamDetail.name}</td>
             </tr>
             <tr>
                 <td>Berdiri</td>
-                <td>: Tahun ${data.team.founded}</td>
+                <td>: Tahun ${teamDetail.founded}</td>
             </tr>
             <tr>
                 <td>Venue</td>
-                <td>: ${data.venue.name}</td>
+                <td>: ${teamDetail.name}</td>
             </tr>
             <tr>
                 <td>Venue address</td>
-                <td>: ${data.venue.address + ', ' + data.venue.city}</td>
+                <td>: ${teamDetail.address + ', ' + teamDetail.city}</td>
             </tr>
             <tr>
                 <td>Venue capacity</td>
-                <td>: ${Number(data.venue.capacity).toLocaleString()}</td>
+                <td>: ${Number(teamDetail.capacity).toLocaleString()}</td>
             </tr>
         </table>
         <hr>

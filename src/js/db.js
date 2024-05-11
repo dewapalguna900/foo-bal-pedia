@@ -11,9 +11,19 @@ const dbObjects = {
         idbPromises.then(db => {
             const tx = db.transaction('teams', 'readwrite');
             const store = tx.objectStore('teams');
-            console.log(team);
 
-            store.add(team);
+            let data = {
+                'id': team.team.id,
+                'name': team.team.name,
+                'founded': team.team.founded,
+                'logo': team.team.logo,
+                'venue': team.venue.name,
+                'venue_address': team.venue.address + ', ' + team.venue.city,
+                'venue_capacity': team.venue.capacity
+            };
+            console.log(data);
+
+            store.add(data);
             return tx.done;
         }).then(() => alert('Informasi Team berhasil disimpan.'));
     },
