@@ -1,8 +1,9 @@
 import dbObjects from "./db.js";
 
 const apiObjects = {
-    loadCompetitions: function (id_competition = "2000") {
-        const url = `https://api.football-data.org/v4/competitions/${id_competition}/teams`;
+    loadCompetitions: function (id_league = "1") {
+        // const url = `https://api.football-data.org/v4/competitions/${id_league}/teams`;
+        const url = `https://v3.football.api-sports.io/standings?league=${id_league}&season=2022`;
 
         if ("caches" in window) {
             caches.match(url)
@@ -18,7 +19,7 @@ const apiObjects = {
 
         fetch(url, {
             headers: {
-                'X-Auth-Token': '35794953e6804ca6ac42557550827322'
+                'x-apisports-key': 'cdcb1506eae903d882be3c4bd56c0b0f'
             }
         })
             .then(response => {
@@ -28,7 +29,8 @@ const apiObjects = {
                 return response.json();
             })
             .then(responseJson => {
-                this.setViewCompetitions(responseJson);
+                // console.log(responseJson.response[0].league.standings[0][0].team.name);
+                this.setViewCompetitions(responseJson.response[0].league);
             });
     },
     setViewCompetitions: function (responseJson) {
@@ -43,37 +45,30 @@ const apiObjects = {
             detailCompetition.parentNode.removeChild(detailCompetition);
         }
         let competitionStr = `<div class="row" style="text-align: center;">
-                <h4 class="col l12 m12 s12">${responseJson.competition.name} - ${responseJson.competition.lastUpdated.slice(0, 4)}</h4>
-                <h5 class="col l12 m12 s12">Season ${responseJson.season.id}</h5>`;
-        if (responseJson.season.winner === null) {
-            competitionStr += `<h5 class="col l12 m12 s12">Belum Ada Pemenang pada Season ini</h5>`;
-        } else {
-            competitionStr += `<h5 class="col l12 m12 s12"><strong>-- WINNER --</strong></h5>
-                    <div class="col s4 m4 l4"></div>
-                    <div class="col s12 m4 l4 card-panel hoverable" style="padding: 10px;">
-                        <img src="${responseJson.season.winner.crestUrl}" alt="Bendera ${responseJson.season.winner.name}"
-                            class="responsive-img">
-                        <p class="center-align">${responseJson.season.winner.name}</p>
-                        <a href="./detail-team.html?id=${responseJson.season.winner.id}" class="waves-effect waves-light btn btn-detail-team">Detail Tim</a>
-                    </div>
-                    <div class="col s4 m4 l4"></div>
-                </div>`;
-        }
+                <h4 class="col l12 m12 s12">${responseJson.name}</h4>
+                <h5 class="col l12 m12 s12">Season ${responseJson.season}</h5>
+                <h5 class="col l12 m12 s12">Klasemen Grup</h5>`;
 
-        competitionStr += `<h5 class="col l12 m12 s12" style="text-align: center;margin-bottom:30px;"><hr><strong>-- TEAM PARTICIPATED --</strong></h5>
+        // Looping Klasemen Grup
+        let groupOrder = 'A';
+        responseJson.standings.forEach(group => {
+            competitionStr += `<h5 class="col l12 m12 s12" style="text-align: center;margin-bottom:30px;"><hr><strong>GROUP ${groupOrder}</strong></h5>
                 <div class="row" style="text-align: center;">`;
-        responseJson.teams.forEach(team => {
-            let teamLogo = '../../assets/img/default_team_logo.png';
-            if (team.crestUrl !== null && team.crestUrl !== "") {
-                teamLogo = team.crestUrl.replace(/^http:\/\//i, 'https://');
-            }
 
-            competitionStr += `<div class="col s12 m6 l3 card-panel hoverable" style="padding: 5px;margin-bottom: 20px;">
-                        <img src="${teamLogo}" alt="Bendera ${team.name}"
-                            class="responsive-img" style="height: 200px">
-                        <p class="center-align">${team.name}</p>
-                        <a href="./detail-team.html?id=${team.id}" class="waves-effect waves-light btn btn-detail-team">Detail Tim</a>
-                    </div>`;
+            let rank = 1;
+            group.forEach(topFourTeam => {
+                competitionStr += `<div class="col s12 m6 l3 card-panel hoverable" style="padding: 5px;margin-bottom: 20px;">
+                    <img src="${topFourTeam.team.logo}" alt="Bendera ${topFourTeam.team.name}"
+                        class="responsive-img" style="height: 200px">
+                    <p class="center-align">${topFourTeam.team.name}</p>
+                    <p class="center-align">Rank: ${topFourTeam.rank}</p>
+                    <p class="center-align">Points: ${topFourTeam.points}</p>
+                    <a href="./detail-team.html?id=${topFourTeam.team.id}" class="waves-effect waves-light btn btn-detail-team">Detail Tim</a>
+                </div>`;
+            });
+
+            // Increment alphabet letter for next group title
+            groupOrder = String.fromCharCode(groupOrder.charCodeAt() + 1);
         });
         competitionStr += '</div>';
         competitionView.innerHTML = competitionStr;
