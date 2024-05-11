@@ -118,20 +118,25 @@ const apiObjects = {
                 })
         });
     },
-    setDetailTeamView: function (data) {
+    setDetailTeamView: function (data, saved = false) {
         const contentContainer = document.querySelector('#body-content');
         const detailTeamView = document.createElement('div');
         detailTeamView.className = 'row';
 
-        let teamDetail = {
-            'id': data.team.id,
-            'name': data.team.name,
-            'founded': data.team.founded,
-            'logo': data.team.logo,
-            'venue': data.venue.name,
-            'venue_address': data.venue.address + ', ' + team.venue.city,
-            'venue_capacity': data.venue.capacity
-        };
+        let teamDetail = "";
+        if (!saved) {
+            teamDetail = {
+                'id': data.team.id,
+                'name': data.team.name,
+                'founded': data.team.founded,
+                'logo': data.team.logo,
+                'venue': data.venue.name,
+                'venue_address': data.venue.address + ', ' + data.venue.city,
+                'venue_capacity': data.venue.capacity
+            };
+        } else {
+            teamDetail = data;
+        }
 
         // let teamLogo = '../../assets/img/default_team_logo.png';
         // if (data.crestUrl !== null && data.crestUrl !== "") {
@@ -205,13 +210,13 @@ const apiObjects = {
 
                 let strSavedTeams = "";
                 dbTeams.forEach(team => {
-                    let teamLogo = '../../assets/img/default_team_logo.png';
-                    if (team.crestUrl !== null && team.crestUrl !== "") {
-                        teamLogo = team.crestUrl.replace(/^http:\/\//i, 'https://');
-                    }
+                    // let teamLogo = '../../assets/img/default_team_logo.png';
+                    // if (team.crestUrl !== null && team.crestUrl !== "") {
+                    //     teamLogo = team.crestUrl.replace(/^http:\/\//i, 'https://');
+                    // }
 
                     strSavedTeams += `<div class="col s12 m6 l3 card-panel hoverable" style="padding: 5px;margin-bottom: 20px;">
-                    <img src="${teamLogo}" alt="Bendera ${team.name}"
+                    <img src="${team.logo}" alt="Bendera ${team.name}"
                         class="responsive-img" style="height: 200px">
                     <p class="center-align">${team.name}</p>
                     <a href="./detail-team.html?id=${team.id}&saved=true" class="waves-effect waves-light btn btn-detail-team">Detail Tim</a>
@@ -249,7 +254,7 @@ const apiObjects = {
 
         dbObjects.getTeamById(idParam)
             .then(team => {
-                apiObjects.setDetailTeamView(team);
+                apiObjects.setDetailTeamView(team, true);
             });
     }
 }
