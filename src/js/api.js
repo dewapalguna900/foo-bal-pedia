@@ -19,14 +19,14 @@ const apiObjects = {
 
         fetch(url, {
             headers: {
-                'x-apisports-key': 'cdcb1506eae903d882be3c4bd56c0b0f'
-            }
+                'x-apisports-key': 'cdcb1506eae903d882be3c4bd56c0b0f',
+            },
         })
             .then(response => {
                 if (response.status !== 200) {
                     return 'Data tidak ditemukan.';
                 }
-                return response.json();
+                return response.text();
             })
             .then(responseJson => {
                 // console.log(responseJson.response[0].league.standings[0][0].team.name);
